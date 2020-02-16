@@ -40,6 +40,7 @@ class Login extends React.Component {
 
   handleSubmit = () => {
     const { name, password } = this.state
+    console.dir(process.env)
     getToken(name, password)
   }
 }
