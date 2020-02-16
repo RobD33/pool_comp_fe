@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
+import { getToken } from '../../utils/connection'
 
 class Login extends React.Component {
 
@@ -13,11 +14,11 @@ class Login extends React.Component {
       <div>
         <div>
           <label>Username:</label>
-          <input type="text" value={this.state.password} onChange={this.handlePasswordChange} />
+          <input type="text" value={this.state.name} onChange={this.handleNameChange} />
         </div>
         <div>
           <label>Password:</label>
-          <input type="password" value={this.state.name} onChange={this.handleNameChange} />
+          <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
         </div>
         <Button type='button' onClick={this.handleSubmit}>Log In</Button>
       </div>
@@ -39,7 +40,7 @@ class Login extends React.Component {
 
   handleSubmit = () => {
     const { name, password } = this.state
-    console.log(name, password)
+    getToken(name, password)
   }
 }
 
