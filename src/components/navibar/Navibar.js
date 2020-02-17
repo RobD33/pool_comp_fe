@@ -12,7 +12,8 @@ function Navibar() {
           <Nav.Link href="profile" >Profile</Nav.Link>
           <Nav.Link href="competitions" >Competitions</Nav.Link>
           <Nav.Link href="stats" >Stats</Nav.Link>
-          <Nav.Link href='login' >Log In/Sign Up</Nav.Link>
+          <Nav.Link href='login' >Log In</Nav.Link>
+          <Nav.Link href='signup' >Sign Up</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

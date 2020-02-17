@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
-import { getToken } from '../../utils/connection'
+import { getToken, validatePassword } from '../../utils/connection'
 
 class Login extends React.Component {
 
@@ -40,8 +40,16 @@ class Login extends React.Component {
 
   handleSubmit = () => {
     const { name, password } = this.state
-    console.dir(process.env)
-    getToken(name, password)
+    validatePassword(name, password)
+      .then(valid => {
+        console.log(valid)
+        if(valid) {
+          getToken(name)
+            .then(token => {
+              this.props.setToken(token)
+            })
+        }
+      })
   }
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import { getUsers, createUser } from '../../utils/connection'
+import { encrypt } from '../../utils/encrypt'
 
 class Login extends React.Component {
 
@@ -21,6 +22,7 @@ class Login extends React.Component {
         <div>
           <label>Username:</label>
           <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+          {!this.state.uniqueName && <label>Username is taken</label>}
         </div>
         <div>
           <label>Password:</label>
@@ -77,13 +79,15 @@ class Login extends React.Component {
     this.checkMatch()
     this.checkName()
     if (matchPassword && loadedUsers && uniqueName) {
-      createUser(name, password, email)
+      encrypt(password).then(encryptedPassword => {
+        createUser(name, encryptedPassword, email)
+      })
     }
   }
 
   checkMatch = () => {
     const { password, confirmPassword } = this.state
-    const matchPassword = password == confirmPassword
+    const matchPassword = password === confirmPassword
     this.setState({ matchPassword })
   }
 

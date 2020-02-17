@@ -1,22 +1,35 @@
-import { get } from 'axios'
+import { get, post } from 'axios'
+import { compare } from './encrypt'
 import { URL } from '../config/config'
 
-const getToken = (username, password) => {
-  get(`${URL}users`, { params: { username, password } })
-    .then(response => console.log(response))
-    .catch(error => console.log(error))
+const getToken = (username) => {
+  return getUser(username)
+          .then(response => response.data.token)
+          .catch(error => console.log(error))
 }
 
 const getUsers = () => {
-  get(`${URL}users`)
+  return get(`${URL}users`)
+          .then(response => response.data)
+          .catch(error => console.log(error))
+}
+
+const createUser = (username, encrypted_password, email) => {
+  post(`${URL}users`, { params: {username, encrypted_password, email } })
     .then(response => console.log(response))
     .catch(error => console.log(error))
 }
 
-const createUser = (name, password, email) => {
-  post(`${URL}users`, { params: {name, password, email } })
-    .then(response => console.log(response))
-    .catch(error => console.log(error))
+const validatePassword = (username, password) => {
+  return getUser(username)
+          .then(response => {
+            return compare(password, response.data.encrypted_password)
+          })
+          .catch(console.log)
 }
 
-export { getToken, getUsers, createUser }
+const getUser = (username) => {
+  return get(`${URL}users/${username}`)
+}
+
+export { getToken, getUsers, createUser, validatePassword }
