@@ -5,8 +5,9 @@ import { getToken, validatePassword } from '../../utils/connection'
 class Login extends React.Component {
 
     state = {
-      name:'',
-      password: ''
+      username: '',
+      password: '',
+      rememberMe: true
     }
   
   render() {
@@ -14,11 +15,15 @@ class Login extends React.Component {
       <div>
         <div>
           <label>Username:</label>
-          <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+          <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
         </div>
         <div>
           <label>Password:</label>
           <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
+        </div>
+        <div>
+          <label>Remember me</label>
+          <input type="checkbox" checked={this.state.rememberMe} onChange={this.handleRememberMeChange} />
         </div>
         <Button type='button' onClick={this.handleSubmit}>Log In</Button>
       </div>
@@ -26,9 +31,9 @@ class Login extends React.Component {
   }
   
 
-  handleNameChange = (e) => {
+  handleUsernameChange = (e) => {
     this.setState({
-      name: e.target.value
+      username: e.target.value
     })
   }
 
@@ -38,15 +43,22 @@ class Login extends React.Component {
     })
   }
 
+  handleRememberMeChange = (e) => {
+    this.setState({
+      rememberMe: e.target.checked
+    })
+  }
+
   handleSubmit = () => {
-    const { name, password } = this.state
-    validatePassword(name, password)
+    const { username, password, rememberMe } = this.state
+    validatePassword(username, password)
       .then(valid => {
-        console.log(valid)
         if(valid) {
-          getToken(name)
+          getToken(username)
             .then(token => {
-              this.props.setToken(token)
+              const user = { username, token}
+              this.props.setUser(user, rememberMe)
+              this.props.history.push('/home')
             })
         }
       })

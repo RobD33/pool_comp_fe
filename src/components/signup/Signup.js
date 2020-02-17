@@ -6,7 +6,7 @@ import { encrypt } from '../../utils/encrypt'
 class Login extends React.Component {
 
     state = {
-      name:'',
+      username:'',
       password: '',
       confirmPassword: '',
       email: '',
@@ -21,7 +21,7 @@ class Login extends React.Component {
       <div>
         <div>
           <label>Username:</label>
-          <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+          <input type="text" value={this.state.username} onChange={this.handleNameChange} />
           {!this.state.uniqueName && <label>Username is taken</label>}
         </div>
         <div>
@@ -45,7 +45,7 @@ class Login extends React.Component {
 
   handleNameChange = (e) => {
     this.setState({
-      name: e.target.value
+      username: e.target.value
     })
   }
 
@@ -69,7 +69,7 @@ class Login extends React.Component {
 
   handleSubmit = () => {
     const { 
-      name,
+      username,
       password,
       email,
       matchPassword,
@@ -77,10 +77,14 @@ class Login extends React.Component {
       loadedUsers
     } = this.state
     this.checkMatch()
-    this.checkName()
+    this.checkUsername()
     if (matchPassword && loadedUsers && uniqueName) {
       encrypt(password).then(encryptedPassword => {
-        createUser(name, encryptedPassword, email)
+        createUser(username, encryptedPassword, email)
+          .then(token => {
+            const user = { username, token }
+            this.props.setUser(user)
+          })
       })
     }
   }
@@ -91,8 +95,8 @@ class Login extends React.Component {
     this.setState({ matchPassword })
   }
 
-  checkName = () => {
-    const uniqueName = !this.state.users.includes(this.state.name)
+  checkUsername = () => {
+    const uniqueName = !this.state.users.includes(this.state.username)
     this.setState({ uniqueName })
   }
 

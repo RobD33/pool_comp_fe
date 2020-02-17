@@ -15,16 +15,14 @@ const getUsers = () => {
 }
 
 const createUser = (username, encrypted_password, email) => {
-  post(`${URL}users`, { params: {username, encrypted_password, email } })
-    .then(response => console.log(response))
-    .catch(error => console.log(error))
+  return post(`${URL}users`, { params: {username, encrypted_password, email } })
+          .then(response => response.data.token)
+          .catch(error => console.log(error))
 }
 
 const validatePassword = (username, password) => {
   return getUser(username)
-          .then(response => {
-            return compare(password, response.data.encrypted_password)
-          })
+          .then(response => compare(password, response.data.encrypted_password))
           .catch(console.log)
 }
 
@@ -32,4 +30,9 @@ const getUser = (username) => {
   return get(`${URL}users/${username}`)
 }
 
-export { getToken, getUsers, createUser, validatePassword }
+const validateToken = (username, token) => {
+  return getToken(username)
+          .then(response => token === response)
+}
+
+export { getToken, getUsers, createUser, validatePassword, validateToken }
