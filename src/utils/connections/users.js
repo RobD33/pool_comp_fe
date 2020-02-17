@@ -1,6 +1,6 @@
 import { get, post } from 'axios'
-import { compare } from './encrypt'
-import { URL } from '../config/config'
+import { compare } from '../encrypt'
+import { URL } from '../../config/config'
 
 const getToken = (username) => {
   return getUser(username)

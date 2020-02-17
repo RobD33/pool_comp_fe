@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
-import { getUsers, createUser } from '../../utils/connection'
+import { getUsers, createUser } from '../../utils/connections/users'
 import { encrypt } from '../../utils/encrypt'
 
 class Login extends React.Component {
