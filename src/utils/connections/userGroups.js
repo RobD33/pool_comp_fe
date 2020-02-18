@@ -7,8 +7,8 @@ const getUserGroups = (username) => {
     .catch(console.log)
 }
 
-const addUserToGroup = (username, name) => {
-  post(`${URL}user_groups`, { params: { username, name } })
+const addUserToGroup = (params) => {
+  post(`${URL}user_groups`, { params })
     .then(response => console.log(response))
     .catch(console.log)
 }

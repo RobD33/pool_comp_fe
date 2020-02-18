@@ -1,7 +1,8 @@
 import React from 'react'
 import { Form, Button } from 'react-bootstrap'
 import './createGroup.css'
-import { createGroup, getGroups } from '../../utils/connections/groups'
+import { getGroups } from '../../utils/connections/groups'
+import { addUserToGroup } from '../../utils/connections/userGroups'
 
 class CreateGroup extends React.Component {
 
@@ -84,20 +85,18 @@ class CreateGroup extends React.Component {
   
   submit = (e) => {
     e.preventDefault()
+    const { username } = this.props
     const { name, description, privacy } = this.state
     if(this.state.uniqueName) {
-      createGroup( name, description, privacy)
-        .then(() => this.groupCreated())
+      const group = { name, description, privacy }
+      const admin = true
+      addUserToGroup({ username, group, admin })
     }
   }
 
   checkName = (name) => {
     const uniqueName = !this.state.groups.includes(name) && name !== ''
     this.setState({ uniqueName })
-  }
-
-  groupCreated = () => {
-
   }
 
   componentDidMount = () => {
