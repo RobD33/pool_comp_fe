@@ -6,6 +6,7 @@ import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 import CreateGroup from './components/createGroup/CreateGroup';
 import { validateToken } from './utils/connections/users';
+import { getUserGroups } from './utils/connections/userGroups'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -15,7 +16,7 @@ class App extends React.PureComponent {
       username: null,
       token: null
     },
-    groups: [],
+    userGroups: [],
     selectedGroup: null
   }
 
@@ -27,15 +28,15 @@ class App extends React.PureComponent {
           logOut={this.logOut}
           user={this.state.user}
           loggedIn={this.loggedIn()}
-          groups={this.state.groups}
+          userGroups={this.state.userGroups}
           selectGroup={this.selectGroup}
         />
         <Switch>
-            <Route exact path='/' render={(props) => <Welcome {...props} user={this.state.user}/>}/>
-            <Route exact path='/login' render={(props) => <Login {...props} setUser={this.setUser}/>}/>
-            <Route exact path='/signup' render={(props) => <Signup {...props} setUser={this.setUser}/>}/>
-            <Route exact path='/create-a-group' render={(props) => <CreateGroup {...props}/>}/>
-          </Switch>
+          <Route exact path='/' render={(props) => <Welcome {...props} user={this.state.user}/>}/>
+          <Route exact path='/login' render={(props) => <Login {...props} setUser={this.setUser}/>}/>
+          <Route exact path='/signup' render={(props) => <Signup {...props} setUser={this.setUser}/>}/>
+          <Route exact path='/create-a-group' render={(props) => <CreateGroup {...props} selectGroup={this.selectGroup}/>}/>
+        </Switch>
       </div>
     );
   }
@@ -57,11 +58,11 @@ class App extends React.PureComponent {
   }
 
   loggedIn = () => {
-    return this.state.user.username && this.valid()
+    const { username, token } = this.state.user
+    return username && this.valid(username, token)
   }
 
-  valid = () => {
-    const { username, token } = this.state.user
+  valid = (username, token) => {
     if(username && token) {
       return validateToken(username, token)
     } else {
@@ -75,12 +76,19 @@ class App extends React.PureComponent {
 
   componentDidMount = () => {
     const localStorageString = localStorage.getItem('on-the-baize')
-    let user
-    if(localStorageString){
-      user = JSON.parse(localStorageString)
-    }
-    if(user){
-      this.setState({user})
+    if(localStorageString) {
+      let { username, token } = JSON.parse(localStorageString)
+      this.valid(username, token)
+        .then(valid => {
+          if (valid) {
+            const user = { username, token }
+            this.setState({ user })
+            getUserGroups(username)
+              .then(userGroups => {
+                if(userGroups) this.setState({ userGroups })
+              })
+          }
+        })
     }
   }
 }
