@@ -6,7 +6,7 @@ import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 import CreateGroup from './components/createGroup/CreateGroup';
 import { validateToken } from './utils/connections/users';
-import { getUserGroups } from './utils/connections/userGroups'
+import { getGroupsForUser } from './utils/connections/groups';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -16,7 +16,7 @@ class App extends React.PureComponent {
       username: null,
       token: null
     },
-    userGroups: [],
+    groupsForUser: [],
     selectedGroup: null
   }
 
@@ -28,7 +28,7 @@ class App extends React.PureComponent {
           logOut={this.logOut}
           user={this.state.user}
           loggedIn={this.loggedIn()}
-          userGroups={this.state.userGroups}
+          groupsForUser={this.state.groupsForUser}
           selectGroup={this.selectGroup}
         />
         <Switch>
@@ -89,9 +89,10 @@ class App extends React.PureComponent {
           if (valid) {
             const user = { username, token }
             this.setState({ user })
-            getUserGroups(username)
-              .then(userGroups => {
-                if(userGroups) this.setState({ userGroups })
+            getGroupsForUser(username)
+              .then(groupsForUser => {
+                console.log(groupsForUser)
+                if(groupsForUser) this.setState({ groupsForUser })
               })
           }
         })

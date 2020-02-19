@@ -13,4 +13,9 @@ const getGroups = () => {
           .catch(console.log)
 }
 
-export { createGroup, getGroups }
+const getGroupsForUser = (username) => {
+  return get(`${URL}groups/`, { params: { username } })
+          .then(response => response.data)
+          .catch(console.log)
+}
+export { createGroup, getGroups, getGroupsForUser }

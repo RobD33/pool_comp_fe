@@ -2,7 +2,7 @@ import React from 'react'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import './navibar.css'
 
-function Navibar({loggedIn, user, logOut, history, userGroups, selectGroup }) {
+function Navibar({loggedIn, user, logOut, history, groupsForUser, selectGroup }) {
 
   const navigateTo = (path, e) => {
     e.preventDefault()
@@ -36,11 +36,12 @@ function Navibar({loggedIn, user, logOut, history, userGroups, selectGroup }) {
             id="nav-dropdown"
             disabled={!loggedIn}
           >
-            {userGroups.map(group => {
+            {groupsForUser.length && groupsForUser.map((group, index) => {
               return (
                 <NavDropdown.Item
+                  key={index}
                   onClick={(e) => selectGroupAndNavigate(group, e) }
-                >{group}</NavDropdown.Item>
+                >{group.name}</NavDropdown.Item>
               )
             })}
             <NavDropdown.Item
