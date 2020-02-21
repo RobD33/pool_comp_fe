@@ -5,6 +5,7 @@ import Welcome from './components/welcome/Welcome';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 import CreateGroup from './components/createGroup/CreateGroup';
+import Group from './components/group/Group';
 import { validateToken } from './utils/connections/users';
 import { getGroupsForUser } from './utils/connections/groups';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,6 +36,7 @@ class App extends React.PureComponent {
           <Route exact path='/' render={(props) => <Welcome {...props} user={this.state.user}/>}/>
           <Route exact path='/login' render={(props) => <Login {...props} setUser={this.setUser}/>}/>
           <Route exact path='/signup' render={(props) => <Signup {...props} setUser={this.setUser}/>}/>
+          <Route exact path='/groups' render={(props) => <Group {...props} selectedGroup={this.state.selectedGroup}/>}/>
           <Route 
             exact path='/create-a-group'
               render={(props) => <CreateGroup 
